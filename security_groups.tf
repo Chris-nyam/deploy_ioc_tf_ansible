@@ -40,10 +40,10 @@ resource "aws_security_group" "jenkins-sg" {
     cidr_blocks = [var.external_ip]
   }
   ingress {
-    description = "allow anyone on port 8080"
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
+    description     = "allow anyone on port 8080"
+    from_port       = var.webserver-port
+    to_port         = var.webserver-port
+    protocol        = "tcp"
     security_groups = [aws_security_group.lb-sg.id]
   }
   ingress {
@@ -63,7 +63,7 @@ resource "aws_security_group" "jenkins-sg" {
 
 #Create SG for allowing TCP/22 from your IP in us-west-2
 resource "aws_security_group" "jenkins-sg-oregon" {
-  provider = aws.region-worker
+  provider    = aws.region-worker
   name        = "jenkins-sg-oregon"
   description = "Allow TCP/8080 & TCP/22"
   vpc_id      = aws_vpc.vpc_master_oregon.id
